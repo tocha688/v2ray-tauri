@@ -21,5 +21,6 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             command::au_command_new,
             command::au_command_child_kill,
         ])
+        
         .build()
 }

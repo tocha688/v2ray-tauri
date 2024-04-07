@@ -15,9 +15,9 @@ export type SpawnOptions = {
 
 export class Child {
     pid: number;
-    id: number;
+    id: string;
     public _iskill = false;
-    constructor(pid: number, id: number) {
+    constructor(pid: number, id: string) {
         this.pid = pid;
         this.id = id;
     }
@@ -31,7 +31,6 @@ export class Child {
     }
     async write(data: string | Uint8Array) {
         if (this._iskill) return Promise.resolve();
-
     }
 }
 
@@ -87,7 +86,7 @@ export class AuCommand extends EventEmitter {
         return new Promise(async r => {
             window.appWindow.once("au://events/init/" + id, function (data) {
                 _this.pid = data.payload as number;
-                _this._child = new Child(_this.pid)
+                _this._child = new Child(_this.pid, _this.id)
                 r(_this._child)
             })
             this.pid = await invoke("plugin:autool|au_command_new", data)

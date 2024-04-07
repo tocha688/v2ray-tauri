@@ -149,11 +149,7 @@ pub fn au_command_new<R: Runtime>(
     // //等待退出
     // let wait_win = window.clone();
     // let wait_child = child2.clone();
-    canmands
-        .0
-        .lock()
-        .unwrap()
-        .insert(id.clone(), child_arc.clone());
+    canmands.0.lock().unwrap().insert(id.clone(), child_arc.clone());
     //回调
     let _ = win2
         .lock()
