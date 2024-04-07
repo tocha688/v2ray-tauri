@@ -1,0 +1,68 @@
+{
+  "build": {
+    "beforeDevCommand": "yarn dev",
+    "beforeBuildCommand": "yarn build",
+    "devPath": "http://localhost:1420",
+    "distDir": "../dist",
+    "withGlobalTauri": true
+  },
+  "package": {
+    "productName": "tauri-v2ray",
+    "version": "0.0.1"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": true,
+      "fs": {
+        "scope": [
+          "**",
+          "$RESOURCE/*",
+          "$HOME/*"
+        ]
+      },
+      "http": {
+        "all": true,
+        "scope": [
+          "http://**/*",
+          "https://**/*"
+        ]
+      },
+      "shell": {
+        "all": true,
+        "sidecar": true,
+        "execute": true
+      }
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.tauri.v2ray.dev",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "resources": [
+        "resources/*"
+      ]
+    },
+    "security": {
+      "csp": null
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "resizable": false,
+        "center": true,
+        "title": "v2ray-tauri",
+        "width": 260,
+        "height": 380,
+        "maximized": false,
+        "fileDropEnabled": false,
+        "decorations": true
+      }
+    ]
+  }
+}

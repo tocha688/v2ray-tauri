@@ -1,0 +1,41 @@
+import { createdConfig } from "./config"
+import { resolveResource, executableDir, join, dirname } from '@tauri-apps/api/path';
+import { writeTextFile, BaseDirectory } from '@tauri-apps/api/fs';
+import { Child, Command } from '@tauri-apps/api/shell';
+import {  current_dir, fs_write_text } from "./AuTools";
+import * as AuTools from "./AuTools";
+import { AuCommand } from "./AuTools/AuCommand";
+
+
+//启动服务
+export async function startServer() {
+    const config = createdConfig();
+    //将config写入到config.json
+    const appPath = await current_dir()
+    // console.log(appPath)
+    const v2rayBase = appPath + "\\resources\\v2ray-core";
+    const configPath = v2rayBase + "\\config.json";
+    const v2rayPath = v2rayBase + "\\v2ray.exe";
+    // console.log(configPath, v2rayPath)
+    await writeTextFile(configPath, JSON.stringify(config))
+    debugger
+    if ((window as any).v2rayServer) {
+        await (window as any).v2rayServer.kill().catch((e: any) => {
+            console.error("进程终止失败", e)
+        });
+    }
+
+    // //创建命令
+    const command = new AuCommand(v2rayPath, ["run"], {
+        cwd: v2rayBase
+    },"v2ray");
+    command.on('close', data => {
+        console.log(`v2ray关闭进程： ${data}`)
+    });
+    command.on('error', error => console.error(`v2ray错误: "${error}"`));
+    command.stdout.on('data', line => console.log(line));
+    command.stderr.on('data', line => console.log(line));
+    //运行子进程
+    const child = (window as any).v2rayServer = await command.spawn();
+    console.log('pid:', child.pid);
+}
