@@ -36,7 +36,7 @@ export const routingTypes = [
     { label: "绕过局域网和大陆地址", value: "local_and_cn" },
 ]
 //@ts-ignore
-export const settings: any = useStorageAsync<any>("settings", defaultSetting(), Storage)
+export const settings: Ref<any> = useStorageAsync("settings", defaultSetting(), Storage)
 //@ts-ignore
 export const links: Ref<any[]> = useStorageAsync("links", [{ url: "", enable: false }], Storage)
 //@ts-ignore 代理列表

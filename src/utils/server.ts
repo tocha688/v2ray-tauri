@@ -7,7 +7,8 @@ import * as AuTools from "./AuTools";
 import { AuCommand } from "./AuTools/AuCommand";
 import { TauriEvent } from "@tauri-apps/api/event";
 import { appWindow, getCurrent } from "@tauri-apps/api/window";
-
+import { AuProcess } from "./AuTools/AuProcess";
+import { settings } from "./setting"
 
 //启动服务
 export async function startServer() {
@@ -25,6 +26,11 @@ export async function startServer() {
             console.error("进程终止失败", e)
         });
     }
+    //结束端口占用进程
+    await AuProcess.kill_by_ports([
+        settings.value.local.socks.port,
+        settings.value.local.http.port
+    ])
 
     // //创建命令
     const command = new AuCommand(v2rayPath, ["run"], {
