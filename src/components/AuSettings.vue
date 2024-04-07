@@ -5,7 +5,7 @@ const isShow = ref(false);
 
 
 function onSubmit() {
-
+    onClose()
 }
 function onClose() {
     isShow.value = false;

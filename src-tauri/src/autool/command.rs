@@ -35,7 +35,7 @@ pub fn au_command_child_kill<R: Runtime>(
         //结束线程
         // CommandExt
         //结束进程
-        child.kill();
+        let _ = child.kill();
     }
     //删除
     canmands.0.lock().unwrap().remove(&id);
@@ -56,7 +56,7 @@ pub fn au_command_new<R: Runtime>(
         // CommandExt
         println!("结束：{}", id);
         //结束进程
-        child.kill();
+        let _ = child.kill();
     }
     println!("开始启动：{}", id);
     // // 定义要运行的命令（例如，运行 "ls" 命令以列出当前目录中的文件）
