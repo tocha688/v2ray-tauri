@@ -9,9 +9,11 @@ import { TauriEvent } from "@tauri-apps/api/event";
 import { appWindow, getCurrent } from "@tauri-apps/api/window";
 import { AuProcess } from "./AuTools/AuProcess";
 import { settings } from "./setting"
+import { Loading, Notify } from "quasar"
 
 //启动服务
 export async function startServer() {
+    Loading.show()
     const config = createdConfig();
     //将config写入到config.json
     const appPath = await current_dir()
@@ -45,6 +47,7 @@ export async function startServer() {
     //运行子进程
     const child = (window as any).v2rayServer = await command.spawn();
     console.log('pid:', child.pid);
+    Loading.hide()
 }
 export async function closeServer() {
     if ((window as any).v2rayServer) {

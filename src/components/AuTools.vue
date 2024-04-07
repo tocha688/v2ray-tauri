@@ -46,7 +46,7 @@ async function onUpdateLinks() {
                     dex: dexUrl
                 };
             })).catch((e) => {
-                console.log(dexUrl, "更新失败",e)
+                console.log(dexUrl, "更新失败", e)
                 return null
             })
     }))
@@ -60,18 +60,22 @@ async function onUpdateLinks() {
         })
         proxys.value = newProxys;
         Notify.create("更新完成")
-    }else{
+    } else {
         Notify.create("更新失败")
     }
     //更新完成
     Loading.hide();
 }
 //添加服务
-function onAddSocks(){
+function onAddSocks() {
     (window as any).winServer.add()
 }
-function onReloadServer(){
-    startServer();
+async function onReloadServer() {
+    Loading.show();
+    await startServer()
+        .catch(() => { })
+    Loading.hide();
+    Notify.create("服务重启成功!")
 }
 
 </script>
