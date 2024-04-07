@@ -20,7 +20,6 @@ export async function startServer() {
     const v2rayPath = v2rayBase + "\\v2ray.exe";
     // console.log(configPath, v2rayPath)
     await writeTextFile(configPath, JSON.stringify(config))
-    debugger
     if ((window as any).v2rayServer) {
         await (window as any).v2rayServer.kill().catch((e: any) => {
             console.error("进程终止失败", e)

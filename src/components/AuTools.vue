@@ -66,6 +66,10 @@ async function onUpdateLinks() {
     //更新完成
     Loading.hide();
 }
+//添加服务
+function onAddSocks(){
+    (window as any).winServer.add()
+}
 function onReloadServer(){
     startServer();
 }
@@ -95,6 +99,7 @@ function onReloadServer(){
                 </q-item>
             </q-list>
         </q-btn-dropdown> -->
+        <q-btn @click="onAddSocks" title="添加" flat dense icon="add_circle_outline" class="q-mr-sm" />
         <q-btn @click="openSetting" title="设置" flat dense icon="settings" class="q-mr-sm" />
         <q-btn @click="onReloadServer" flat dense icon="restart_alt" title="重启服务" class="q-mr-sm" />
         <q-btn @click="openLinkPage" flat dense icon="manage_accounts" title="订阅设置" class="q-mr-sm" />
