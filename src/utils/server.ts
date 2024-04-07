@@ -11,8 +11,11 @@ import { AuProcess } from "./AuTools/AuProcess";
 import { settings } from "./setting"
 import { Loading, Notify } from "quasar"
 
+const _window = window as any
+
 //启动服务
 export async function startServer() {
+    _window._v2ray_start = true;
     Loading.show()
     const config = createdConfig();
     //将config写入到config.json
@@ -39,13 +42,18 @@ export async function startServer() {
         cwd: v2rayBase
     }, "v2ray");
     command.on('close', data => {
-        console.log(`v2ray关闭进程： ${data}`)
+        console.log(`v2ray关闭进程： ${data}`);
+        let v2rayServer = (window as any).v2rayServer
+        if (v2rayServer !== command._child || _window._v2ray_start) return;
+        setTimeout(()=>startServer(),5000)
     });
     command.on('error', error => console.error(`v2ray错误: "${error}"`));
     command.stdout.on('data', line => console.log(line));
     command.stderr.on('data', line => console.log(line));
     //运行子进程
     const child = (window as any).v2rayServer = await command.spawn();
+    _window.reloadTimer && clearTimeout(_window.reloadTimer);
+    _window._v2ray_start = false;
     console.log('pid:', child.pid);
     Loading.hide()
 }

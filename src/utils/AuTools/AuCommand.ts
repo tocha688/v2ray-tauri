@@ -33,6 +33,11 @@ export class Child {
         if (this._iskill) return Promise.resolve();
     }
 }
+export type ResultOptions = {
+    pid: number,
+    status?: string,
+    message?: string,
+}
 
 //命令行
 export class AuCommand extends EventEmitter {
@@ -62,19 +67,31 @@ export class AuCommand extends EventEmitter {
         _this.options.env ||= null;
         //监听事件
         window.appWindow.listen("au://events/error/" + id, function (data) {
-            _this.emit("error", data.payload)
-        })
-        window.appWindow.listen("au://events/close/" + id, function (data) {
-            if (_this._child) {
-                _this._child._iskill = true;
+            const rd: ResultOptions = data.payload as any;
+            if (rd.pid == _this.pid) {
+                _this.emit("error", rd.message)
             }
-            _this.emit("close", data.payload)
+        })
+        window.appWindow.listen("au://events/close/" + id, function (data: any) {
+            const rd = data.payload;
+            if (rd.pid == _this.pid) {
+                if (_this._child) {
+                    _this._child._iskill = true;
+                }
+                _this.emit("close", rd)
+            }
         })
         window.appWindow.listen("au://events/stdout/" + id, function (data) {
-            _this.stdout.emit("data", data.payload)
+            const rd: ResultOptions = data.payload as any;
+            if (rd.pid == _this.pid) {
+                _this.emit("data", rd.message)
+            }
         })
         window.appWindow.listen("au://events/stderr/" + id, function (data) {
-            _this.stderr.emit("data", data.payload)
+            const rd: ResultOptions = data.payload as any;
+            if (rd.pid == _this.pid) {
+                _this.emit("data", rd.message)
+            }
         })
         //
         const data = {
