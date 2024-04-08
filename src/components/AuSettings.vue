@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import { settings, routingDomainStrategys, routingTypes } from "../utils/setting"
+import { startServer } from "../utils/server";
 const isShow = ref(false);
 
 
 function onSubmit() {
+    //开机启动设置
+    //重启服务
+    startServer();
     onClose()
 }
 function onClose() {
