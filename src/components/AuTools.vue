@@ -46,7 +46,7 @@ async function onUpdateLinks() {
                     dex: dexUrl
                 };
             })).catch((e) => {
-                console.log(dexUrl, "更新失败",e)
+                console.log(dexUrl, "更新失败", e)
                 return null
             })
     }))
@@ -60,14 +60,22 @@ async function onUpdateLinks() {
         })
         proxys.value = newProxys;
         Notify.create("更新完成")
-    }else{
+    } else {
         Notify.create("更新失败")
     }
     //更新完成
     Loading.hide();
 }
-function onReloadServer(){
-    startServer();
+//添加服务
+function onAddSocks() {
+    (window as any).winServer.add()
+}
+async function onReloadServer() {
+    Loading.show();
+    await startServer()
+        .catch(() => { })
+    Loading.hide();
+    Notify.create("服务重启成功!")
 }
 
 </script>
@@ -95,6 +103,7 @@ function onReloadServer(){
                 </q-item>
             </q-list>
         </q-btn-dropdown> -->
+        <q-btn @click="onAddSocks" title="添加" flat dense icon="add_circle_outline" class="q-mr-sm" />
         <q-btn @click="openSetting" title="设置" flat dense icon="settings" class="q-mr-sm" />
         <q-btn @click="onReloadServer" flat dense icon="restart_alt" title="重启服务" class="q-mr-sm" />
         <q-btn @click="openLinkPage" flat dense icon="manage_accounts" title="订阅设置" class="q-mr-sm" />

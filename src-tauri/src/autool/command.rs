@@ -9,7 +9,7 @@ use std::{
 
 use serde::{Deserialize, Serialize};
 use shared_child::SharedChild;
-use tauri::{Builder, EventLoopMessage, Runtime, State, Window, Wry};
+use tauri::{api::ipc::SerializeOptions, Builder, EventLoopMessage, Runtime, State, Window, Wry};
 
 use super::au_struct::Id;
 
@@ -24,6 +24,13 @@ pub struct SpawnOptions {
     env: Option<HashMap<String, String>>,
 }
 
+#[derive(Deserialize, Clone, Serialize)]
+pub struct ResultOptions {
+    pid: u32,
+    status: Option<String>,
+    message: Option<String>,
+}
+
 //结束子进程
 #[tauri::command(async)]
 pub fn au_command_child_kill<R: Runtime>(
@@ -35,7 +42,7 @@ pub fn au_command_child_kill<R: Runtime>(
         //结束线程
         // CommandExt
         //结束进程
-        child.kill();
+        let _ = child.kill();
     }
     //删除
     canmands.0.lock().unwrap().remove(&id);
@@ -56,7 +63,7 @@ pub fn au_command_new<R: Runtime>(
         // CommandExt
         println!("结束：{}", id);
         //结束进程
-        child.kill();
+        let _ = child.kill();
     }
     println!("开始启动：{}", id);
     // // 定义要运行的命令（例如，运行 "ls" 命令以列出当前目录中的文件）
@@ -103,16 +110,24 @@ pub fn au_command_new<R: Runtime>(
             match line {
                 Ok(line) => {
                     println!("{}", line);
-                    let _ = stdout_win
-                        .lock()
-                        .unwrap()
-                        .emit(&format!("au://events/stdout/{}", stdout_id), line);
+                    let _ = stdout_win.lock().unwrap().emit(
+                        &format!("au://events/stdout/{}", stdout_id),
+                        ResultOptions {
+                            pid: pid,
+                            status: None,
+                            message: Some(line),
+                        },
+                    );
                 }
                 Err(err) => {
-                    let _ = stdout_win
-                        .lock()
-                        .unwrap()
-                        .emit(&format!("au://events/error/{}", stdout_id), err.to_string());
+                    let _ = stdout_win.lock().unwrap().emit(
+                        &format!("au://events/error/{}", stdout_id),
+                        ResultOptions {
+                            pid: pid,
+                            status: None,
+                            message: Some(err.to_string()),
+                        },
+                    );
                     return;
                 }
             }
@@ -130,16 +145,24 @@ pub fn au_command_new<R: Runtime>(
             match line {
                 Ok(line) => {
                     println!("{}", line);
-                    let _ = stderr_win
-                        .lock()
-                        .unwrap()
-                        .emit(&format!("au://events/stderr/{}", stderr_id), line);
+                    let _ = stderr_win.lock().unwrap().emit(
+                        &format!("au://events/stderr/{}", stderr_id),
+                        ResultOptions {
+                            pid: pid,
+                            status: None,
+                            message: Some(line),
+                        },
+                    );
                 }
                 Err(err) => {
-                    let _ = stderr_win
-                        .lock()
-                        .unwrap()
-                        .emit(&format!("au://events/error/{}", stderr_id), err.to_string());
+                    let _ = stderr_win.lock().unwrap().emit(
+                        &format!("au://events/error/{}", stderr_id),
+                        ResultOptions {
+                            pid: pid,
+                            status: None,
+                            message: Some(err.to_string()),
+                        },
+                    );
                     return;
                 }
             }
@@ -149,7 +172,11 @@ pub fn au_command_new<R: Runtime>(
     // //等待退出
     // let wait_win = window.clone();
     // let wait_child = child2.clone();
-    canmands.0.lock().unwrap().insert(id.clone(), child_arc.clone());
+    canmands
+        .0
+        .lock()
+        .unwrap()
+        .insert(id.clone(), child_arc.clone());
     //回调
     let _ = win2
         .lock()
@@ -158,16 +185,24 @@ pub fn au_command_new<R: Runtime>(
     let wait_win2 = win2.clone();
     thread::spawn(move || match child_arc.wait() {
         Ok(status) => {
-            let _ = wait_win2
-                .lock()
-                .unwrap()
-                .emit(&format!("au://events/close/{}", id), status.to_string());
+            let _ = wait_win2.lock().unwrap().emit(
+                &format!("au://events/close/{}", id),
+                ResultOptions {
+                    pid: pid,
+                    status: Some(status.to_string()),
+                    message: None,
+                },
+            );
         }
         Err(e) => {
-            let _ = wait_win2
-                .lock()
-                .unwrap()
-                .emit(&format!("au://events/error/{}", id), e.to_string());
+            let _ = wait_win2.lock().unwrap().emit(
+                &format!("au://events/error/{}", id),
+                ResultOptions {
+                    pid: pid,
+                    status: None,
+                    message: Some(e.to_string()),
+                },
+            );
         }
     });
     Ok(pid)

@@ -128,8 +128,9 @@ export default class v2rayUtils {
                             {
                                 "id": info._data.id,
                                 "alterId": info._data.aid || 0,
-                                "email": "t@t.tt",
-                                "security": info?.method || "auto"
+                                // "email": "t@t.tt",
+                                "security": info?.method || "auto",
+                                "level": 1
                             }
                         ]
                     }

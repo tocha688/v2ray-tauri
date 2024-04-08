@@ -7,6 +7,7 @@ pub mod au_struct;
 pub mod command;
 pub mod fs;
 pub mod path;
+pub mod process;
 
 //初始化
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
@@ -20,6 +21,10 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             //command
             command::au_command_new,
             command::au_command_child_kill,
+            //process
+            process::au_process_kill_by_id,
+            process::au_process_kill_by_port,
+            process::au_process_kill_by_ports,
         ])
         
         .build()

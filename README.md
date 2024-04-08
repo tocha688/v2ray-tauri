@@ -25,3 +25,6 @@ v2rayTA是基于tauri制作的v2ray gui客户端
 5.导入导出代理信息(复制导出、剪切板导入、二维码导出) 
 
 6.实现驱动级别全局代理
+
+## License
+[The MIT License (MIT)](https://github.com/tocha688/v2ray-tauri/blob/main/LICENSE)
