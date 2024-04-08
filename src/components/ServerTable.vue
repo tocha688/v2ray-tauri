@@ -8,6 +8,7 @@ function changePorxy(it: any) {
 
 //修改
 function updateProxy(index: number, it: any) {
+    (window as any).winServer.update(it._id)
 }
 
 //删除

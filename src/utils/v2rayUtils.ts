@@ -204,4 +204,33 @@ export default class v2rayUtils {
         }
         return config;
     }
+    //获取分享内容
+    static getShare(info: any) {
+        let _str = "socks://";
+        let title = info.title ? encodeURIComponent(info.title) : "";
+        if (info.protocol == "shadowsocks") {
+            _str = "ss://" + Base64.encode([info.method, info.password + "@" + info.address, info.port].join(":")) + "#" + title;
+        } else if (info.protocol == "vmess") {
+            _str = "vmess://" + Base64.encode(JSON.stringify({
+                "v": "2",
+                "ps": info.title || "",
+                "add": info.address,
+                "port": info.port,
+                "id": info._data.id,
+                "aid": info._data.aid,
+                "net": info._data.net || "tcp",
+                "type": info.method || "none",
+                "host": "",
+                "path": "",
+                "tls": ""
+            }));
+        } else if (info.protocol == "socks") {
+            let pwd = "";
+            if (info.username || info.password) {
+                pwd = [info.username, info.password].filter(x => !!x).join(":") + "@"
+            }
+            _str = "socks://" + Base64.encode([pwd + info.address, info.port].filter(x => !!x).join(":")) + "#" + title;
+        }
+        return _str;
+    }
 }
