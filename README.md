@@ -27,4 +27,4 @@ v2rayTA是基于tauri制作的v2ray gui客户端
 6.实现驱动级别全局代理
 
 ## License
-[The MIT License (MIT)](https://github.com/tocha688/v2ray-tauri/blob/main/LICENSE)
+[The MIT License (MIT)](https://github.com/tocha688/v2ray-tauri/raw/main/LICENSE)
