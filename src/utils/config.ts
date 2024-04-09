@@ -75,7 +75,7 @@ export function createdConfig() {
         }
         if (["cn", "local_and_cn"].includes(type)) {
             //放过大陆地址
-            routing.rules.push(/* {
+            routing.rules.push({
                 "type": "field",
                 "port": null,
                 "outboundTag": "direct",
@@ -83,13 +83,11 @@ export function createdConfig() {
                     "geoip:cn"
                 ],
                 "domain": null
-            },  */{
+            }, {
                 "type": "field",
                 "port": null,
                 "outboundTag": "direct",
-                "ip": [
-                    "geoip:cn"
-                ],
+                "ip": null,
                 "domain": [
                     "geosite:cn"
                 ]
