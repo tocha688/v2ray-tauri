@@ -114,7 +114,7 @@ function onSubmit() {
         const index = proxys.value.findIndex(x => x._id == update_data.value._id)
         proxys.value[index] = nConfig;
         Notify.create("修改成功!")
-        if(nConfig._id==proxyChangeId.value){
+        if (nConfig._id == proxyChangeId.value) {
             //重启服务
             startServer();
         }
@@ -159,6 +159,7 @@ function onClose() {
         onClose();
     }
 }
+const isPwdInput = ref(true)
 </script>
 
 <template>
@@ -192,8 +193,13 @@ function onClose() {
             <!-- 地址和密码 -->
             <q-input v-if="['socks'].includes(type)" class="input" dense v-model="data.username" label="账户" />
             <!-- 密码只有ss和socks有 -->
-            <q-input v-if="['socks', 'shadowsocks'].includes(type)" class="input" dense type="password"
-                v-model="data.password" label="密码" />
+            <q-input v-if="['socks', 'shadowsocks'].includes(type)" class="input" dense
+                :type="isPwdInput ? 'password' : 'text'" v-model="data.password" label="密码">
+                <template v-slot:append>
+                    <q-icon :name="isPwdInput ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+                        @click="isPwdInput = !isPwdInput" />
+                </template>
+            </q-input>
 
             <template v-if="['shadowsocks', 'vmess'].includes(type)">
                 <q-select class="input" options-dense dense v-model="data.method" :options="encryptionOptions"

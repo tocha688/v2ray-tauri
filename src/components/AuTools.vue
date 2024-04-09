@@ -93,8 +93,6 @@ async function onShowLog() {
         height: 460,
         center: true,
     })
-    // since the webview window is created asynchronously,
-    // Tauri emits the `tauri://created` and `tauri://error` to notify you of the creation response
     _window.winLogs.once('init_console', function () {
         // webview window successfully created
         _window.winLogs.emit("console", _window.logs)

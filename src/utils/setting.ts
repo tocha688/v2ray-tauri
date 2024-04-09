@@ -1,10 +1,7 @@
-import { useStorageAsync, useUrlSearchParams, watchOnce } from '@vueuse/core'
+import { useStorageAsync, watchOnce } from '@vueuse/core'
 import Storage from './Storage'
 import { Ref, computed, watch, watchEffect } from 'vue'
 import { startServer } from './server'
-
-const params = useUrlSearchParams()
-
 
 //默认设置
 const defaultSetting = () => (
@@ -26,9 +23,14 @@ const defaultSetting = () => (
             //代理类型 global.全局 local.绕过局域网 cn.绕过大陆 local_and_cn.绕过局域网和大陆地址
             "type": "global"
         },
-        "dns": "",
+        "dns": "8.8.8.8,8.8.4.4,localhost",
         //开机启动
-        "startup": false
+        "startup": false,
+        //是否开启浏览探测
+        "sniffing": false,
+        //负载均衡
+        "mux": "",
+        "log": true
     }
 )
 export const routingDomainStrategys = ["AsIs", "IPIfNonMatch", "IPOnDemand"]
@@ -46,7 +48,6 @@ export const links: Ref<any[]> = useStorageAsync("links", [{ url: "", enable: fa
 export const proxys: Ref<any[]> = useStorageAsync("proxys", [], Storage)
 //@ts-ignore 当前代理的IP
 export const proxyChangeId: Ref<number> = useStorageAsync("proxy_change_id", proxys.value[0]?.id, Storage)
-
 //当前代理信息
 export const proxyInfo = computed(() => {
     if (!proxyChangeId.value) return null;
@@ -62,7 +63,6 @@ export async function initProxyInfo(it?: any) {
         proxyChangeId.value = proxys.value[0]?._id;
     }
 }
-// console.log(params)
 
 watch(proxyInfo, async (info: any) => {
     if (!info) {
@@ -73,6 +73,3 @@ watch(proxyInfo, async (info: any) => {
 }, {
     immediate: true
 })
-
-
-

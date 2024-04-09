@@ -46,7 +46,14 @@ const _routingType = computed({
                 :options="_routingDomainStrategys" label="域名策略" />
             <q-select class="input" options-dense dense v-model="_routingType" :options="_routingTypes" label="路由模式" />
             <q-input class="input" dense v-model="settings.dns" label="DNS策略" />
-            <q-toggle class="toggle" label="开机启动" size="sm" v-model="settings.startup" />
+            <q-input class="input" type="number" dense v-model="settings.mux" label="Mux(1-1024)"
+                placeholder="不填写则不开启，v2ray默认8" />
+            <!-- <q-toggle class="toggle" label="开Mux负载均衡" size="sm" v-model="settings.isMux" /> -->
+            <!-- <q-checkbox v-model="settings.isMux" label="开Mux负载均衡"/> -->
+            <div class="row">
+                <q-toggle class="toggle" label="开机启动" size="sm" v-model="settings.startup" />
+                <q-toggle class="toggle" label="开启探测" size="sm" v-model="settings.log" />
+            </div>
             <div class="center">
                 <q-btn class="btn" dense label="确定" type="submit" color="primary" />
                 <q-btn class="btn" @click="onClose" dense outline label="取消" color="red-4" />
@@ -64,12 +71,20 @@ const _routingType = computed({
     top: 0;
     left: 0;
     padding: 20px 5px;
+    .row {
+        margin-top: 0;
+        display: flex;
+        flex-flow: row nowrap;
+        gap: 2px;
+    }
 
-    .input,.toggle {
+    .input,
+    .toggle {
         margin-top: 0;
         background-color: #fff;
     }
-    .toggle{
+
+    .toggle {
         width: 100%;
     }
 

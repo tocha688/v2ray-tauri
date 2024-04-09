@@ -83,7 +83,7 @@ export function createdConfig() {
                     "geoip:cn"
                 ],
                 "domain": null
-            }, */ {
+            },  */{
                 "type": "field",
                 "port": null,
                 "outboundTag": "direct",
@@ -106,14 +106,17 @@ export function createdConfig() {
             ]
         })
     }
+    //mux
+    if (settings.mux) {
+        proxy.mux = {
+            "enabled": true,
+            "concurrency": Number(settings.mux) || 8
+        }
+    }
 
     //------------------routing end
     const config: any = {
-        "log": {
-            "access": "",
-            "error": "",
-            "loglevel": "warning"
-        },
+
         "inbounds": [
             {
                 "port": settings?.local?.socks?.port || 10818,
@@ -174,8 +177,20 @@ export function createdConfig() {
                 "mux": null
             }
         ],
-
         "routing": routing
+    }
+    if (settings.log) {
+        config.log = {
+            "access": "Console",
+            "error": "",
+            "loglevel": "warning"
+        };
+    } else {
+        config.log = {
+            "access": "None",
+            "error": "",
+            "loglevel": "warning"
+        };
     }
     if (settings.dns) {
         config.dns = {
