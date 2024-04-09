@@ -77,7 +77,7 @@ if (!params.log) {
     //监听关闭事件，同步结束服务
     appWindow.listen(TauriEvent.WINDOW_CLOSE_REQUESTED, async () => {
         await closeServer().catch(()=>{});
-        await _window.winLogs.close().catch(()=>{});
+        await _window?.winLogs?.close().catch(()=>{});
         appWindow.close();
     })
 }
