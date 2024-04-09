@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AuConsole: typeof import('./src/components/AuConsole.vue')['default']
     AuLinkTable: typeof import('./src/components/AuLinkTable.vue')['default']
     AuSettings: typeof import('./src/components/AuSettings.vue')['default']
     AuTools: typeof import('./src/components/AuTools.vue')['default']

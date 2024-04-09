@@ -1,4 +1,5 @@
 import { createApp } from "vue";
+import "./utils/console"
 import "./styles.scss";
 import App from "./App.vue";
 import { Quasar, Notify, Dialog, Loading } from 'quasar'

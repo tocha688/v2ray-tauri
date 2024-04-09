@@ -90,6 +90,8 @@ pub fn au_command_new<R: Runtime>(
     cwd.current_dir(options.cwd);
     cwd.stdout(std::process::Stdio::piped());
     cwd.stderr(std::process::Stdio::piped());
+    //隐藏控制台
+    cwd.creation_flags(0x08000000);
     //设置编码格式
     //运行
     let shared_child = SharedChild::spawn(&mut cwd).unwrap();

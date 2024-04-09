@@ -6,6 +6,7 @@ import { Base64 } from "js-base64";
 import { proxys } from "../utils/setting"
 import { Loading, Notify } from "quasar"
 import { startServer } from "../utils/server";
+import { WebviewWindow } from "@tauri-apps/api/window";
 
 function openSetting() {
     (window as any).winSettings.show()
@@ -77,6 +78,31 @@ async function onReloadServer() {
     Loading.hide();
     Notify.create("服务重启成功!")
 }
+const _window = window as any
+async function onShowLog() {
+    try {
+        if (_window.winLogs) {
+            return await _window.winLogs.setFocus()
+        }
+    } catch (e) { }
+    _window.winLogs = new WebviewWindow('Console', {
+        url: '/?log=true',
+        title: "Console",
+        maximizable: false,
+        width: 740,
+        height: 460,
+        center: true,
+    })
+    // since the webview window is created asynchronously,
+    // Tauri emits the `tauri://created` and `tauri://error` to notify you of the creation response
+    _window.winLogs.once('init_console', function () {
+        // webview window successfully created
+        _window.winLogs.emit("console", _window.logs)
+    })
+    _window.winLogs.once('tauri://destroyed', function () {
+        _window.winLogs = null;
+    })
+}
 
 </script>
 
@@ -108,6 +134,7 @@ async function onReloadServer() {
         <q-btn @click="onReloadServer" flat dense icon="restart_alt" title="重启服务" class="q-mr-sm" />
         <q-btn @click="openLinkPage" flat dense icon="manage_accounts" title="订阅设置" class="q-mr-sm" />
         <q-btn @click="onUpdateLinks" flat dense icon="cloud_download" title="更新订阅" class="q-mr-sm" />
+        <q-btn @click="onShowLog" flat dense icon="logo_dev" title="查看日志" class="q-mr-sm" />
     </div>
 </template>
 <style scoped lang="scss">

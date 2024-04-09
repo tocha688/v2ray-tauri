@@ -100,19 +100,19 @@ export default class v2rayUtils {
                 }],
                 "response": null
             },
-            "streamSettings": {
-                "network": "tcp",
-                "security": null,
-                "tlsSettings": null,
-                "tcpSettings": null,
-                "kcpSettings": null,
-                "wsSettings": null,
-                "httpSettings": null,
-                "quicSettings": null
-            },
-            "mux": {
-                "enabled": false
-            }
+            // "streamSettings": {
+            //     "network": "tcp",
+            //     "security": null,
+            //     "tlsSettings": null,
+            //     "tcpSettings": null,
+            //     "kcpSettings": null,
+            //     "wsSettings": null,
+            //     "httpSettings": null,
+            //     "quicSettings": null
+            // },
+            // "mux": {
+            //     "enabled": false
+            // }
         }
     }
     static config_vmess(info: any) {
@@ -130,7 +130,7 @@ export default class v2rayUtils {
                                 "alterId": info._data.aid || 0,
                                 // "email": "t@t.tt",
                                 "security": info?.method || "auto",
-                                "level": 1
+                                "level": 0
                             }
                         ]
                     }
@@ -138,31 +138,40 @@ export default class v2rayUtils {
                 "servers": null,
                 "response": null
             },
-            "streamSettings": {
-                "network": info._data.net || "tcp",
-                "security": "",
-                "tlsSettings": null,
-                "tcpSettings": null,
-                "kcpSettings": null,
-                "wsSettings": null,
-                "httpSettings": null,
-                "quicSettings": null
-            },
-            "mux": {
-                "enabled": !!info.class
-            }
+            // "streamSettings": {
+            //     "network": info._data.net || "tcp",
+            //     "security": "none",
+            //     "tlsSettings": {},
+            //     "tcpSettings": {},
+            //     "kcpSettings": {},
+            //     "wsSettings": {},
+            //     "httpSettings": {},
+            //     "quicSettings": {},
+            //     "dsSettings": {},
+            //     "grpcSettings": {},
+            //     "sockopt": {
+            //         "mark": 0,
+            //         "tcpFastOpen": false,
+            //         "tcpFastOpenQueueLength": 4096,
+            //         "tproxy": "off",
+            //         "tcpKeepAliveInterval": 0
+            //     }
+            // },
+            // "mux": {
+            //     "enabled": !!info.class
+            // }
         }
-        if (info._data.net == "ws") {
-            config.streamSettings.tlsSettings = {
-                "allowInsecure": true,
-                "serverName": null
-            }
-            config.streamSettings.wsSettings = {
-                "connectionReuse": true,
-                "path": info._data.path,
-                "headers": null
-            }
-        }
+        // if (info._data.net == "ws") {
+        //     config.streamSettings.tlsSettings = {
+        //         "allowInsecure": true,
+        //         "serverName": null
+        //     }
+        //     config.streamSettings.wsSettings = {
+        //         "connectionReuse": true,
+        //         "path": info._data.path,
+        //         "headers": null
+        //     }
+        // }
         return config;
     }
     static config_socks(info: any) {
@@ -188,19 +197,19 @@ export default class v2rayUtils {
                 ],
                 "response": null
             },
-            "streamSettings": {
-                "network": "tcp",
-                "security": null,
-                "tlsSettings": null,
-                "tcpSettings": null,
-                "kcpSettings": null,
-                "wsSettings": null,
-                "httpSettings": null,
-                "quicSettings": null
-            },
-            "mux": {
-                "enabled": false
-            }
+            // "streamSettings": {
+            //     "network": "tcp",
+            //     "security": null,
+            //     "tlsSettings": null,
+            //     "tcpSettings": null,
+            //     "kcpSettings": null,
+            //     "wsSettings": null,
+            //     "httpSettings": null,
+            //     "quicSettings": null
+            // },
+            // "mux": {
+            //     "enabled": false
+            // }
         }
         return config;
     }

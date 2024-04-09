@@ -1,5 +1,6 @@
 use std::{
     env,
+    fmt::format,
     sync::{Arc, Mutex},
 };
 
@@ -13,10 +14,9 @@ pub fn au_current_dir() -> Result<String, String> {
             if cfg!(debug_assertions) {
                 Ok(adr)
             } else {
-                Ok(adr)
+                Ok(e.to_str().unwrap().to_string())
             }
         }
         Err(e) => Err(e.to_string()),
     }
 }
-

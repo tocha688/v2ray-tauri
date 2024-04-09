@@ -4,22 +4,30 @@ import ServerUpdate from './components/ServerUpdate.vue';
 import AuSettings from './components/AuSettings.vue';
 import AuTool from "./components/AuTools.vue"
 import AuLinkTable from "./components/AuLinkTable.vue"
+import { useUrlSearchParams } from '@vueuse/core';
+import AuConsole from './components/AuConsole.vue';
 
+const params = useUrlSearchParams()
 
 </script>
 
 <template>
   <div class="container">
-    <!-- 工具栏 -->
-    <au-tool></au-tool>
-    <!-- 表格 -->
-    <ServerTable></ServerTable>
-    <!-- 修改和新增弹窗 -->
-    <ServerUpdate></ServerUpdate>
-    <!-- 设置弹窗 -->
-    <AuSettings></AuSettings>
-    <!-- 订阅弹窗 -->
-    <AuLinkTable></AuLinkTable>
+    <template v-if="params.log">
+      <AuConsole></AuConsole>
+    </template>
+    <template v-else>
+      <!-- 工具栏 -->
+      <au-tool></au-tool>
+      <!-- 表格 -->
+      <ServerTable></ServerTable>
+      <!-- 修改和新增弹窗 -->
+      <ServerUpdate></ServerUpdate>
+      <!-- 设置弹窗 -->
+      <AuSettings></AuSettings>
+      <!-- 订阅弹窗 -->
+      <AuLinkTable></AuLinkTable>
+    </template>
   </div>
 </template>
 

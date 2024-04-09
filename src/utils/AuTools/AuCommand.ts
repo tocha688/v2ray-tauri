@@ -84,13 +84,13 @@ export class AuCommand extends EventEmitter {
         window.appWindow.listen("au://events/stdout/" + id, function (data) {
             const rd: ResultOptions = data.payload as any;
             if (rd.pid == _this.pid) {
-                _this.emit("data", rd.message)
+                _this.stdout.emit("data", rd.message)
             }
         })
         window.appWindow.listen("au://events/stderr/" + id, function (data) {
             const rd: ResultOptions = data.payload as any;
             if (rd.pid == _this.pid) {
-                _this.emit("data", rd.message)
+                _this.stderr.emit("data", rd.message)
             }
         })
         //

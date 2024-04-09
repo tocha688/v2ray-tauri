@@ -5,11 +5,11 @@ export function getProxyConfig() {
     if (!proxyInfo.value) {
         return;
     }
-    if(proxyInfo.value.protocol=="shadowsocks"){
+    if (proxyInfo.value.protocol == "shadowsocks") {
         return v2rayUtils.config_shadowsocks(proxyInfo.value)
-    }else if(proxyInfo.value.protocol=="vmess"){
+    } else if (proxyInfo.value.protocol == "vmess") {
         return v2rayUtils.config_vmess(proxyInfo.value)
-    }else if(proxyInfo.value.protocol=="socks"){
+    } else if (proxyInfo.value.protocol == "socks") {
         return v2rayUtils.config_socks(proxyInfo.value)
     }
 }
@@ -32,31 +32,31 @@ export function createdConfig() {
                     "geosite:category-ads-all"
                 ]
             },
-            {//放过
-                "type": "field",
-                "port": null,
-                "outboundTag": "direct",
-                "ip": null,
-                "domain": [
-                    "microsoft.com",
-                    "microsoftonline.com",
-                    "windows.net",
-                    "windowsupdate.com",
-                    "sharepoint.com",
-                    "office.com",
-                    "live.com",
-                    "live.net",
-                    "epicgames.com",
-                    "epicgames-download1.akamaized.net",
-                    "steampowered.com",
-                    "steamcontent.com",
-                    "dl.steam.ksyna.com",
-                    "dl.steam.clngaa.com",
-                    "cdn.mileweb.cs.steampowered.com.8686c.com",
-                    "heartbeat.dm.origin.com",
-                    "steampipe.steamcontent.tnkjmec.com"
-                ]
-            }
+            // {//放过
+            //     "type": "field",
+            //     "port": null,
+            //     "outboundTag": "direct",
+            //     "ip": null,
+            //     "domain": [
+            //         "microsoft.com",
+            //         "microsoftonline.com",
+            //         "windows.net",
+            //         "windowsupdate.com",
+            //         "sharepoint.com",
+            //         "office.com",
+            //         "live.com",
+            //         "live.net",
+            //         "epicgames.com",
+            //         "epicgames-download1.akamaized.net",
+            //         "steampowered.com",
+            //         "steamcontent.com",
+            //         "dl.steam.ksyna.com",
+            //         "dl.steam.clngaa.com",
+            //         "cdn.mileweb.cs.steampowered.com.8686c.com",
+            //         "heartbeat.dm.origin.com",
+            //         "steampipe.steamcontent.tnkjmec.com"
+            //     ]
+            // }
         ]
     }
     if (settings?.routing) {
@@ -75,7 +75,7 @@ export function createdConfig() {
         }
         if (["cn", "local_and_cn"].includes(type)) {
             //放过大陆地址
-            routing.rules.push({
+            routing.rules.push(/* {
                 "type": "field",
                 "port": null,
                 "outboundTag": "direct",
@@ -83,11 +83,13 @@ export function createdConfig() {
                     "geoip:cn"
                 ],
                 "domain": null
-            }, {
+            }, */ {
                 "type": "field",
                 "port": null,
                 "outboundTag": "direct",
-                "ip": null,
+                "ip": [
+                    "geoip:cn"
+                ],
                 "domain": [
                     "geosite:cn"
                 ]
@@ -117,18 +119,20 @@ export function createdConfig() {
                 "port": settings?.local?.socks?.port || 10818,
                 "listen": settings?.local?.socks?.listen || "0.0.0.0",
                 "protocol": "socks",
-                "sniffing": {
-                    "enabled": false,
-                    "destOverride": [
-                        "http",
-                        "tls"
-                    ]
-                },
+                // "sniffing": {
+                //     "enabled": false,
+                //     "destOverride": [
+                //         "http",
+                //         "tls"
+                //     ]
+                // },
                 "settings": {
                     "auth": "noauth",
-                    "udp": true,
-                    "ip": null,
-                    "clients": null
+                    "clients": null,
+                    "accounts": [],
+                    "udp": false,
+                    "ip": "127.0.0.1",
+                    "userLevel": 0
                 },
                 "streamSettings": null
             },
